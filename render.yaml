@@ -2,8 +2,9 @@ services:
   - type: web
     name: sentinel-ai-backend
     env: python
-    buildCommand: "cd backend && pip install -r requirements.txt && cd .. && mkdir -p backend/data && if [ -n \"$GITHUB_TOKEN\" -a -n \"$GITHUB_REPOSITORY\" ]; then curl -H \"Authorization: token $GITHUB_TOKEN\" -L -o backend/data/trained_model.pkl \"https://github.com/$GITHUB_REPOSITORY/releases/download/${MODEL_RELEASE_TAG:-latest-model}/trained_model.pkl\" || echo 'No model asset found'; fi"
-    startCommand: "cd backend && uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    root: backend
+    buildCommand: "pip install -r requirements.txt && mkdir -p data && if [ -n \"$GITHUB_TOKEN\" -a -n \"$GITHUB_REPOSITORY\" ]; then curl -H \"Authorization: token $GITHUB_TOKEN\" -L -o data/trained_model.pkl \"https://github.com/$GITHUB_REPOSITORY/releases/download/${MODEL_RELEASE_TAG:-latest-model}/trained_model.pkl\" || echo 'No model asset found'; fi"
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.9
