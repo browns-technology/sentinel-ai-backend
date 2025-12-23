@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react';
 import { LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
 import { AlertTriangle, Shield, Zap, TrendingUp, Activity, Eye, Brain, Sparkles, Wifi, WifiOff } from 'lucide-react';
 
-const BACKEND_URL = 'ws://localhost:8000/ws/stream';
+const DEFAULT_WS_PROTOCOL = (typeof window !== 'undefined' && window.location && window.location.protocol === 'https:') ? 'wss:' : 'ws:';
+const BACKEND_URL = process.env.REACT_APP_WS_URL || `${DEFAULT_WS_PROTOCOL}//${(typeof window !== 'undefined' ? window.location.host : 'localhost:8000')}/ws/stream`;
 
 const FraudDetectionCommand = () => {
   const [transactions, setTransactions] = useState([]);
@@ -334,8 +335,8 @@ const FraudDetectionCommand = () => {
               <AlertTriangle className="w-6 h-6 text-red-400" />
               <div>
                 <p className="text-red-300 font-semibold">Connection Failed</p>
-                <p className="text-red-400/70 text-sm">Make sure the backend is running at localhost:8000</p>
-                <p className="text-red-400/70 text-sm mt-1">Check backend terminal for errors</p>
+                <p className="text-red-400/70 text-sm">Make sure the backend is reachable at the configured WebSocket URL.</p>
+                <p className="text-red-400/70 text-sm mt-1">Check backend logs or the browser console for connection details</p>
               </div>
             </div>
           </div>
