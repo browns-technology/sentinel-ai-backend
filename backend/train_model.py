@@ -3,6 +3,7 @@ import numpy as np
 from sklearn.ensemble import IsolationForest
 from sklearn.preprocessing import StandardScaler
 import joblib
+from pathlib import Path
 
 def create_training_data():
     print("Generating training data...")
@@ -54,8 +55,13 @@ def train_model():
         'scaler': scaler,
         'feature_names': list(X.columns)
     }
-    
-    joblib.dump(model_data, 'data/trained_model.pkl')
+
+    # Ensure backend/data directory exists relative to this script
+    data_dir = Path(__file__).resolve().parent / "data"
+    data_dir.mkdir(parents=True, exist_ok=True)
+    model_path = data_dir / "trained_model.pkl"
+
+    joblib.dump(model_data, str(model_path))
     
     predictions = model.predict(X_scaled)
     anomalies = (predictions == -1).sum()
@@ -63,7 +69,7 @@ def train_model():
     print(f"✓ Model trained successfully!")
     print(f"  - Training samples: {len(X)}")
     print(f"  - Detected anomalies: {anomalies} ({anomalies/len(X)*100:.1f}%)")
-    print(f"  - Model saved to: data/trained_model.pkl")
+    print(f"  - Model saved to: {model_path}")
 
 if __name__ == "__main__":
     train_model()
