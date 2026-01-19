@@ -5,7 +5,7 @@ WORKDIR /app
 # Install system build deps required to build pandas/scipy from source
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential gcc g++ gfortran python3-dev pkg-config \
-    libopenblas-dev liblapack-dev ninja-build meson cython \
+    libopenblas-dev liblapack-dev ninja-build meson \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt /tmp/requirements.txt
