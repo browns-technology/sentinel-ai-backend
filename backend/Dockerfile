@@ -12,7 +12,7 @@ COPY requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r /tmp/requirements.txt
 
-COPY /app
+COPY . /app
 RUN mkdir -p /app/data && python /app/train_model.py || echo "Model training failed or skipped"
 
 EXPOSE 8000
