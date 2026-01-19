@@ -31,24 +31,14 @@ jobs:
         run: |
           python backend/train_model.py
 
-      - name: List produced files
+      - name: Verify trained models exists
         run: ls -la backend/data || true
 
-      - id: create_release
-        name: Create or update release `latest-model`
+      - name: Create or update release and upload model
         uses: softprops/action-gh-release@v1
         with:
           tag_name: latest-model
           name: latest-model
+          files: backend/data/trained_model.pkl
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload trained model to release
-        uses: actions/upload-release-asset@v1
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: backend/data/trained_model.pkl
-          asset_name: trained_model.pkl
-          asset_content_type: application/octet-stream
