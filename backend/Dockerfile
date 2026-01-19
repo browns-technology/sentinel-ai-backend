@@ -8,11 +8,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     libopenblas-dev liblapack-dev ninja-build meson cython \
     && rm -rf /var/lib/apt/lists/*
 
-COPY backend/requirements.txt /tmp/requirements.txt
+COPY requirements.txt /tmp/requirements.txt
 RUN pip install --upgrade pip setuptools wheel && \
     pip install --no-cache-dir -r /tmp/requirements.txt
 
-COPY backend/ /app
+COPY /app
 RUN mkdir -p /app/data && python /app/train_model.py || echo "Model training failed or skipped"
 
 EXPOSE 8000
