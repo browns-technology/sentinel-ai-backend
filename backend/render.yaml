@@ -1,9 +1,12 @@
 services:
   - type: web
     name: sentinel-ai-backend
-    env: python
-    buildCommand: "pip install -r requirements.txt"
-    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port $PORT"
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    dockerContext: .
+    env: docker
+    plan: free
+    healthCheckPath: /health
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.11.9
+      - key: PORT
+        value: 8000
